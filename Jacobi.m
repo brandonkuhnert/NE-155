@@ -1,4 +1,4 @@
-function [ x,rho ] = Jacobi( A,b )
+function [ x,iter ] = Jacobi( A,b )
 %Input: a matrix, the b vector, and number of iterations k, 
 %value for x^(0)
 %output: the x vector
@@ -11,17 +11,21 @@ R = A - D;
 T = - inv(D) * R;
 C = inv(D) * b;
 
+
 % spectral radius condition
 rho = max(abs(eig(T)));
 if rho >= 1
     error('no convergence')
 end
 
+%number of iterations
+iter=-6/(log10(rho));
+
 % initial guess
 x = randn(size(b));
 
 % iteration
-while norm(A * x - b) > 1e-15
+while norm(A * x - b) > 10e-6
     x = T * x + C;
 end
 
